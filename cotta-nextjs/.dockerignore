@@ -1,0 +1,9 @@
+node_modules
+.next
+.qa
+.git
+deliverables
+orders-app/data
+.env
+*.zip
+*.log

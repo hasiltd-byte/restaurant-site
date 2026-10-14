@@ -1,0 +1,8 @@
+node_modules/
+.next/
+.qa/
+deliverables/
+orders-app/data/
+*.log
+.env*
+!.env.example

@@ -1,0 +1,247 @@
+[
+  {
+    "id": "margherita",
+    "name": "מרגריטה קלאסית",
+    "en": "THE ORIGINAL",
+    "description": "רוטב עגבניות, מוצרלה, בזיליקום",
+    "price": 72,
+    "category": "pizza",
+    "image": "margherita.jpg",
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "potato",
+    "name": "תפו״א",
+    "en": "A LITTLE DIFFERENT",
+    "description": "מוצרלה, ריקוטה, זעתר כבוש, סלסה עירית",
+    "price": 84,
+    "category": "pizza",
+    "image": "potato.jpg",
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "anchovy",
+    "name": "אנשובי אורטיז",
+    "en": "FROM THE SEA",
+    "description": "רוטב עגבניות, מוצרלה, ארוגולה, חריף ירוק",
+    "price": 86,
+    "category": "pizza",
+    "image": "anchovy.jpg",
+    "tags": []
+  },
+  {
+    "id": "pepperoni",
+    "name": "פפרוני",
+    "en": "THE BOLD ONE",
+    "description": "רוטב עגבניות, מוצרלה",
+    "price": 89,
+    "category": "pizza",
+    "image": "pepperoni.jpg",
+    "tags": []
+  },
+  {
+    "id": "white",
+    "name": "פיצה לבנה",
+    "en": "WHITE MAGIC",
+    "description": "בשמל, פלפל שחור, מוצרלה, פטריות טריות, שמן כמהין, עירית",
+    "price": 89,
+    "category": "pizza",
+    "image": "white.jpg",
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "stracciatella",
+    "name": "סטרצ׳טלה",
+    "en": "ITALIAN SOUL",
+    "description": "פרפום עגבניות, אורגנו, ארטישוק",
+    "price": 92,
+    "category": "pizza",
+    "image": "pizza-editorial.jpg",
+    "illustrative": true,
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "prosciutto",
+    "name": "פרושוטו",
+    "en": "SWEET MEETS SAVORY",
+    "description": "מוצרלה, מייפל, אגסים, ארוגולה",
+    "price": 94,
+    "category": "pizza",
+    "image": "prosciutto.jpg",
+    "tags": []
+  },
+  {
+    "id": "focaccia",
+    "name": "פוקצ׳ה",
+    "en": "BREAK BREAD",
+    "description": "חמאת דואה, דבש, זיתים",
+    "price": 32,
+    "category": "starter",
+    "image": "focaccia.jpg",
+    "illustrative": true,
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "fennel",
+    "name": "שומר צלוי",
+    "en": "FROM THE GARDEN",
+    "description": "חמאת הדרים ועשבים, זיתים מיובשים ברוטב בר־בלאן, פרמזן",
+    "price": 64,
+    "category": "starter",
+    "image": "vegetables.jpg",
+    "illustrative": true,
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "ratatouille",
+    "name": "רטטוי",
+    "en": "MEDITERRANEAN HEART",
+    "description": "חצילים ופלפל שושקה צלויים, יוגורט כבשים של יעקבס, סלסה עירית",
+    "price": 67,
+    "category": "starter",
+    "image": "restaurant.jpg",
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "beina",
+    "name": "סלט ״ביינה״",
+    "en": "FRESH & CRUNCHY",
+    "description": "חסה לליק, תפוח ירוק, ויניגרט דבש ושום, בושה, אגוזי לוז",
+    "price": 64,
+    "category": "starter",
+    "image": "beina.jpg",
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "melanzana",
+    "name": "מלנזנה",
+    "en": "THE COMFORT DISH",
+    "description": "סטייק חציל, פרפום עגבניות, מוצרלה, סלסה עירית, פרמזן",
+    "price": 72,
+    "category": "starter",
+    "image": "vegetables.jpg",
+    "illustrative": true,
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "zucchini",
+    "name": "קישואים צלויים",
+    "en": "SEASONAL GOODNESS",
+    "description": "קישואים בלאדי, ויניגרט שום, נענע, בזיליקום, ריקוטה, דבש חריף",
+    "price": 72,
+    "category": "starter",
+    "image": "vegetables.jpg",
+    "illustrative": true,
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "tomato",
+    "name": "סלט עגבניות",
+    "en": "SUN ON A PLATE",
+    "description": "מגי, חריף ירוק, בצל סגול, חומץ תאנים, קראמבל זיתים, פטה",
+    "price": 74,
+    "category": "starter",
+    "image": "salad.jpg",
+    "illustrative": true,
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "burrata",
+    "name": "בוראטה",
+    "en": "A SOFT SPOT",
+    "description": "סוכריות שרי קונפי, ויניגרט לימון שרוף",
+    "price": 78,
+    "category": "starter",
+    "image": "burrata.jpg",
+    "illustrative": true,
+    "tags": [
+      "צמחוני"
+    ]
+  },
+  {
+    "id": "charcuterie",
+    "name": "צלחת נקניק",
+    "en": "MADE TO SHARE",
+    "description": "נקניק בעבודת יד, חמוצי הבית, חמאה, פוקצ׳ה",
+    "price": 82,
+    "category": "starter",
+    "image": "charcuterie.jpg",
+    "illustrative": true,
+    "tags": []
+  },
+  {
+    "id": "tiramisu",
+    "name": "טירמיסו",
+    "en": "THE PERFECT ENDING",
+    "description": "איטלקי קלאסי",
+    "price": 52,
+    "category": "dessert",
+    "image": "tiramisu.jpg",
+    "illustrative": true,
+    "tags": []
+  },
+  {
+    "id": "vanilla",
+    "name": "״דניאלה״ וניל",
+    "en": "SOMETHING SWEET",
+    "description": "פרליני פקאן, פקאן קלוי",
+    "price": 44,
+    "category": "dessert",
+    "image": "icecream.jpg",
+    "illustrative": true,
+    "tags": []
+  },
+  {
+    "id": "lemon",
+    "name": "גלידת פאי לימון",
+    "en": "ONE LAST BITE",
+    "description": "מרנג איטלקי, קראמבל",
+    "price": 42,
+    "category": "dessert",
+    "image": "icecream.jpg",
+    "illustrative": true,
+    "tags": []
+  },
+  {
+    "id": "cola",
+    "name": "קולה",
+    "en": "ICE COLD",
+    "description": "קוקה קולה",
+    "price": 14,
+    "category": "drink",
+    "image": "cola.jpg",
+    "tags": []
+  },
+  {
+    "id": "cola-zero",
+    "name": "קולה זירו",
+    "en": "ICE COLD",
+    "description": "קוקה קולה זירו",
+    "price": 14,
+    "category": "drink",
+    "image": "cola-zero.jpg",
+    "tags": []
+  }
+]
