@@ -6,3 +6,4 @@ orders-app/data/
 *.log
 .env*
 !.env.example
+next-env.d.ts
