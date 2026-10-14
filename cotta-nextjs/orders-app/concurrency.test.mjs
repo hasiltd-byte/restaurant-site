@@ -1,0 +1,17 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {testDatabase} from './test-database.mjs';
+import {createOrderServer} from './server.mjs';
+test('concurrent app instances share table visits, idempotency and GridFS range playback across restart',async()=>{
+ const database=await testDatabase();let a,b;const create=()=>createOrderServer({mongoUri:database.mongoUri});
+ async function start(){const s=await create();await new Promise(r=>s.listen(0,'127.0.0.1',r));return s}
+ const address=s=>`http://127.0.0.1:${s.address().port}`;
+ let cookie;
+ async function api(s,path,method='GET',body,token){const r=await fetch(address(s)+'/api'+path,{method,headers:{...(body?{'Content-Type':'application/json'}:{}),...(cookie?{Cookie:cookie}:{}),...(token?{Authorization:'Bearer '+token}:{})},body:body?JSON.stringify(body):undefined});return {status:r.status,data:await r.json(),headers:r.headers}}
+ async function close(s){if(s){await new Promise(r=>s.close(r));await s.databaseClosed}}
+ try{a=await start();b=await start();cookie=(await api(a,'/login','POST',{username:'פיצה',password:'123'})).headers.get('set-cookie').split(';')[0];assert.equal((await api(b,'/admin/state')).status,200);const qr=(await api(a,'/admin/tables')).data.tables[0],key=new URL(qr.link).searchParams.get('key');const joined=await Promise.all([api(a,'/join','POST',{table:1,key,name:'Concurrent A',party:2}),api(b,'/join','POST',{table:1,key,name:'Concurrent B',party:2})]);assert.ok(joined.every(r=>r.status===201));assert.equal(joined[0].data.visitId,joined[1].data.visitId);assert.notEqual(joined[0].data.id,joined[1].data.id);
+ const token=joined[0].data.token,body={type:'dinein',nonce:randomUUID(),items:[{id:'margherita',quantity:1}]};const orders=await Promise.all([api(a,'/orders','POST',body,token),api(b,'/orders','POST',body,token)]);assert.deepEqual(orders.map(r=>r.status).sort(),[200,201]);assert.equal(orders[0].data.id,orders[1].data.id);assert.equal((await api(a,'/admin/state')).data.orders.length,1);
+ const bytes=Buffer.concat([Buffer.from([0,0,0,24]),Buffer.from('ftypisom'),Buffer.alloc(17*1024*1024,8)]);const upload=(await api(a,'/admin/video/margherita/uploads','POST',{size:bytes.length})).data;for(let offset=0,index=0;offset<bytes.length;offset+=upload.chunkSize,index++){const chunk=await fetch(address(index%2?a:b)+`/api/admin/video/margherita/uploads/${upload.id}/chunks/${index}`,{method:'PUT',headers:{Cookie:cookie,'Content-Type':'video/mp4'},body:bytes.subarray(offset,offset+upload.chunkSize)});assert.equal(chunk.status,200)}const completed=await api(b,`/admin/video/margherita/uploads/${upload.id}`,'POST',{});assert.equal(completed.status,201);const video=completed.data.video;assert.equal((await api(a,`/admin/video/margherita/uploads/${upload.id}`,'POST',{})).data.video,video);await close(a);a=await start();const playback=await fetch(address(a)+video,{headers:{Range:'bytes=4-11'}});assert.equal(playback.status,206);assert.equal(playback.headers.get('content-range'),`bytes 4-11/${bytes.length}`);assert.deepEqual(Buffer.from(await playback.arrayBuffer()),bytes.subarray(4,12));const invalidRange=await fetch(address(a)+video,{headers:{Range:`bytes=${bytes.length}-`}});assert.equal(invalidRange.status,416);assert.equal((await api(a,'/menu')).data.videos.margherita,video);assert.equal((await api(a,'/admin/state')).status,200);
+ }finally{await close(a);await close(b);await database.close()}
+});

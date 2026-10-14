@@ -3,27 +3,29 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/run.mjs",
+    "dev": "next dev --hostname 0.0.0.0",
     "build": "next build",
-    "start": "node scripts/run.mjs --production",
-    "orders": "node orders-app/server.mjs",
-    "test:orders": "node --test orders-app/server.test.mjs orders-app/reservations.test.mjs"
+    "start": "next start --hostname 0.0.0.0",
+    "test:orders": "node --test orders-app/server.test.mjs orders-app/reservations.test.mjs orders-app/concurrency.test.mjs",
+    "test:browser": "node scripts/next-browser-check.mjs"
   },
   "engines": {
     "node": ">=22.13.0"
   },
   "dependencies": {
-    "next": "^15.5.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
     "lucide-react": "^0.468.0",
-    "qrcode": "^1.5.4"
+    "mongoose": "^9.11.2",
+    "next": "^16.4.1",
+    "qrcode": "^1.5.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
-    "typescript": "^5.7.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0"
+    "@types/react-dom": "^19.0.0",
+    "mongodb-memory-server": "^11.3.0",
+    "typescript": "^5.7.0"
   },
   "overrides": {
     "postcss": "^8.5.30"

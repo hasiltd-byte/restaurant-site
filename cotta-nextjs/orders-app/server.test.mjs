@@ -1,3 +1,4 @@
+import {testDatabase} from './test-database.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtempSync,rmSync} from 'node:fs';
@@ -6,7 +7,7 @@ import {join} from 'node:path';
 import {createOrderServer} from './server.mjs';
 import {randomUUID} from 'node:crypto';
 test('real shared orders: auth, table visits, pricing, idempotency, kitchen, takeaway and persistence',async t=>{
- const dir=mkdtempSync(join(tmpdir(),'tableflow-test-'));let server=createOrderServer({dataDir:dir});await new Promise(r=>server.listen(0,'127.0.0.1',r));let url=`http://127.0.0.1:${server.address().port}`,cookie='';
+ const dir=mkdtempSync(join(tmpdir(),'tableflow-test-'));const database=await testDatabase();let server=await createOrderServer({dataDir:dir,mongoUri:database.mongoUri});await new Promise(r=>server.listen(0,'127.0.0.1',r));let url=`http://127.0.0.1:${server.address().port}`,cookie='';
  async function call(path,method='GET',body,token,staff=false){const r=await fetch(url+'/api'+path,{method,headers:{...(body?{'Content-Type':'application/json'}:{}),...(token?{Authorization:'Bearer '+token}:{}),...(staff?{Cookie:cookie}:{})},body:body?JSON.stringify(body):undefined});return {status:r.status,data:await r.json(),headers:r.headers}}
  try{
   assert.equal((await call('/admin/state')).status,401);
@@ -30,7 +31,7 @@ test('real shared orders: auth, table visits, pricing, idempotency, kitchen, tak
   const take={type:'takeaway',nonce:randomUUID(),token:randomUUID(),name:'משה',phone:'0501234567',pickup:'בעוד 30 דקות',items:[{id:'margherita',quantity:1}]};const to=await call('/orders','POST',take);assert.equal(to.status,201);assert.equal(to.data.payment,'pending_phone');assert.equal((await call(`/admin/order/${to.data.id}`,'PATCH',{status:'preparing'},null,true)).status,409);assert.equal((await call(`/admin/order/${to.data.id}`,'PATCH',{payment:'paid'},null,true)).status,200);assert.equal((await call(`/admin/order/${to.data.id}`,'PATCH',{status:'preparing'},null,true)).status,200);
   assert.equal((await call('/orders','POST',{...take,nonce:randomUUID(),phone:'123'})).status,400);assert.equal((await call('/orders','POST',{...take,nonce:randomUUID(),items:[{id:'margherita',quantity:-1}]})).status,400);
   const badOrigin=await fetch(url+'/api/orders',{method:'POST',headers:{Origin:'https://malicious.example','Content-Type':'application/json'},body:JSON.stringify(take)});assert.equal(badOrigin.status,403);
-  const pendingVisitOrder=await call('/orders','POST',{...body,nonce:randomUUID()},next.token);assert.equal(pendingVisitOrder.status,201);server.database.prepare('UPDATE visits SET opened_at=? WHERE id=?').run(Date.now()-9*3600000,next.visitId);assert.equal((await call('/session','GET',null,next.token)).status,410);assert.equal((await call('/join','POST',{table:1,key,name:'רותם',party:2})).status,409);assert.equal((await call(`/admin/order/${pendingVisitOrder.data.id}`,'PATCH',{status:'cancelled'},null,true)).status,200);const fresh=(await call('/join','POST',{table:1,key,name:'רותם',party:2})).data;assert.notEqual(fresh.visitId,next.visitId);
-  await new Promise(r=>server.close(r));server=createOrderServer({dataDir:dir});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}`;const restored=await call(`/my-order/${to.data.id}`,'GET',null,take.token);assert.equal(restored.status,200);assert.equal(restored.data.payment,'paid');assert.equal(restored.data.total,72);
- }finally{await new Promise(r=>server.close(r));rmSync(dir,{recursive:true,force:true})}
+  const pendingVisitOrder=await call('/orders','POST',{...body,nonce:randomUUID()},next.token);assert.equal(pendingVisitOrder.status,201);await server.models.Visit.updateOne({id:next.visitId},{$set:{opened_at:Date.now()-9*3600000}});assert.equal((await call('/session','GET',null,next.token)).status,410);assert.equal((await call('/join','POST',{table:1,key,name:'רותם',party:2})).status,409);assert.equal((await call(`/admin/order/${pendingVisitOrder.data.id}`,'PATCH',{status:'cancelled'},null,true)).status,200);const fresh=(await call('/join','POST',{table:1,key,name:'רותם',party:2})).data;assert.notEqual(fresh.visitId,next.visitId);
+  await new Promise(r=>server.close(r));await server.databaseClosed;server=await createOrderServer({dataDir:dir,mongoUri:database.mongoUri});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}`;const restored=await call(`/my-order/${to.data.id}`,'GET',null,take.token);assert.equal(restored.status,200);assert.equal(restored.data.payment,'paid');assert.equal(restored.data.total,72);
+ }finally{await new Promise(r=>server.close(r));await server.databaseClosed;await database.close();rmSync(dir,{recursive:true,force:true})}
 });

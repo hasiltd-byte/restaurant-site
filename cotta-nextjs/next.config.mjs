@@ -1,1 +1,1 @@
-export default {async rewrites(){return [{source:'/order/:path*',destination:`${process.env.ORDERS_INTERNAL_URL||'http://127.0.0.1:4100'}/:path*`}]}};
+export default {serverExternalPackages:['mongoose'],outputFileTracingIncludes:{'/order/[[...path]]':['./orders-app/public/**/*','./shared/menu.json','./public/images/**/*']},outputFileTracingExcludes:{'*':['./orders-app/data/**/*','./.qa/**/*','./deliverables/**/*','./.env','./.env.*','./orders-app/*.test.mjs','./orders-app/server.mjs','./orders-app/test-database.mjs']}};

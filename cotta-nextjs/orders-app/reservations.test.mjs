@@ -1,3 +1,4 @@
+import {testDatabase} from './test-database.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtempSync,rmSync} from 'node:fs';
@@ -6,7 +7,7 @@ import {join} from 'node:path';
 import {randomUUID,randomBytes} from 'node:crypto';
 import {createOrderServer} from './server.mjs';
 test('native bookings: approval, overlapping slots, capacity, cancellation, persistence and concurrent managers',async()=>{
- const dir=mkdtempSync(join(tmpdir(),'cotta-booking-test-'));let s=createOrderServer({dataDir:dir});await new Promise(r=>s.listen(0,'127.0.0.1',r));let root=`http://127.0.0.1:${s.address().port}/api`,cookie;
+ const dir=mkdtempSync(join(tmpdir(),'cotta-booking-test-'));const database=await testDatabase();let s=await createOrderServer({dataDir:dir,mongoUri:database.mongoUri});await new Promise(r=>s.listen(0,'127.0.0.1',r));let root=`http://127.0.0.1:${s.address().port}/api`,cookie;
  async function call(path,method='GET',body,auth=false,token){const r=await fetch(root+path,{method,headers:{...(body?{'Content-Type':'application/json'}:{}),...(auth?{Cookie:cookie}:{}),...(token?{Authorization:'Bearer '+token}:{})},body:body?JSON.stringify(body):undefined});return {status:r.status,data:await r.json(),headers:r.headers}}
  try{
   cookie=(await call('/login','POST',{username:'פיצה',password:'123'})).headers.get('set-cookie').split(';')[0];
@@ -26,6 +27,6 @@ test('native bookings: approval, overlapping slots, capacity, cancellation, pers
   const sameStart=await call('/reservations','POST',request('19:00'));assert.equal(sameStart.status,201);assert.equal((await call(`/admin/reservations/${sameStart.data.id}`,'PATCH',{status:'confirmed',table:1},true)).status,200);
   assert.equal((await call(`/admin/reservations/${sameStart.data.id}`,'PATCH',{status:'seated'},true)).status,200);assert.equal((await call(`/admin/reservations/${sameStart.data.id}`,'PATCH',{status:'completed'},true)).status,200);assert.ok(!(await availability()).data.slots.some(s=>s.time==='19:00'));
   assert.equal((await call('/reservations','POST',{...request(),phone:'bad'})).status,400);assert.equal((await call('/reservations','POST',request('19:15'))).status,400);assert.equal((await call('/reservations/availability?date=2026-02-31&party=2')).status,400);assert.equal((await call('/reservations','POST',{...request(),date:'2000-01-01'})).status,400);
-  await new Promise(r=>s.close(r));s=createOrderServer({dataDir:dir});await new Promise(r=>s.listen(0,'127.0.0.1',r));root=`http://127.0.0.1:${s.address().port}/api`;assert.equal((await call(`/reservations/${winner.data.id}`,'GET',null,false,winBody.token)).data.status,'cancelled');assert.ok(!(await availability()).data.slots.some(s=>s.time==='19:00'));
- }finally{await new Promise(r=>s.close(r));rmSync(dir,{recursive:true,force:true})}
+  await new Promise(r=>s.close(r));await s.databaseClosed;s=await createOrderServer({dataDir:dir,mongoUri:database.mongoUri});await new Promise(r=>s.listen(0,'127.0.0.1',r));root=`http://127.0.0.1:${s.address().port}/api`;assert.equal((await call(`/reservations/${winner.data.id}`,'GET',null,false,winBody.token)).data.status,'cancelled');assert.ok(!(await availability()).data.slots.some(s=>s.time==='19:00'));
+ }finally{await new Promise(r=>s.close(r));await s.databaseClosed;await database.close();rmSync(dir,{recursive:true,force:true})}
 });
