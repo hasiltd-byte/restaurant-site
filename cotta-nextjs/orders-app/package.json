@@ -1,7 +1,0 @@
-{
-  "name": "tableflow-source",
-  "private": true,
-  "scripts": {
-    "start": "npm --prefix .. start"
-  }
-}
