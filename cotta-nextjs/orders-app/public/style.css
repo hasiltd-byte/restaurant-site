@@ -11,3 +11,69 @@
 @media(max-width:520px){.booking-admin-summary{gap:9px}.booking-admin-summary>div{padding:13px 10px}.booking-admin-summary strong{font-size:29px}.booking-admin-summary span{font-size:9px}.booking-admin-summary small{font-size:8px}.reservation-card{padding:20px}.reservation-card header{gap:12px}.reservation-card h3{font-size:18px}.reservation-actions .btn{font-size:11px}.reservation-table-plan article{display:block;padding:17px}.plan-table-label{width:auto;margin-bottom:12px}.plan-table-bookings{gap:7px}.plan-reserved{font-size:10px;flex-wrap:wrap;gap:5px}.booking-hours-grid{grid-template-columns:1fr;gap:15px}.booking-settings-card{padding:20px}.booking-table-settings>div{grid-template-columns:1fr 1fr;gap:15px}.booking-table-settings>div>b{grid-column:1/-1}.booking-enabled{grid-column:1/-1}.booking-list-title{align-items:flex-start}.booking-list-title h3{font-size:17px}}
 .consumer-layout>*,.consumer-grid>*{min-width:0}.consumer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.consumer-layout{grid-template-columns:minmax(0,1fr) 340px}@media(max-width:900px){.consumer-layout{grid-template-columns:minmax(0,1fr)}}
 @media(min-width:901px){.consumer-layout>div{max-height:calc(100dvh - 40px);overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior-y:contain;padding-inline-end:8px}.basket{max-height:calc(100dvh - 40px);overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior-y:contain;scroll-padding-block:20px}}
+/* Comfortable mobile ordering and staff controls. Desktop layout is unchanged. */
+@media(max-width:760px){
+ .consumer-header{gap:12px;padding:18px 5%;flex-wrap:wrap}
+ .consumer-header>div{font-size:14px}
+ .consumer-header>a:last-child{font-size:13px;min-height:40px;display:flex;align-items:center}
+ .consumer-intro h1{font-size:32px;line-height:1.3}
+ .consumer-intro p{font-size:16px;line-height:1.65}
+ .consumer-grid{grid-template-columns:minmax(0,1fr);gap:22px}
+ .consumer-dish{border-radius:14px}
+ .dish-photo{aspect-ratio:1.3}
+ .consumer-dish-body{padding:19px}
+ .consumer-dish-body h3{font-size:22px;line-height:1.35}
+ .consumer-dish-body strong{font-size:20px;white-space:nowrap}
+ .consumer-dish-body p{font-size:16px;line-height:1.65;min-height:0;margin:12px 0 18px}
+ .consumer-dish-body>small{font-size:10px;letter-spacing:1px}
+ .dish-bottom span{font-size:12px}
+ .dish-bottom button{min-height:44px;padding:10px 15px;background:var(--red);color:#fffaf0;border-radius:999px;font-size:14px}
+ .consumer-tabs{gap:8px;border:0;padding-bottom:10px;scrollbar-width:none}
+ .consumer-tabs button{flex-shrink:0;min-height:44px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:#fffdf7;font-size:14px}
+ .consumer-tabs button.active{background:var(--red);border-color:var(--red);color:#fffaf0}
+ .basket{padding:20px;border-radius:14px;overflow:visible;max-height:none}
+ .basket-heading h2{font-size:25px}
+ .basket-item b{font-size:16px}.basket-item span{font-size:13px}
+ .basket-item button{min-width:44px;min-height:44px}
+ label{font-size:14px;line-height:1.5}
+ input:not([type=checkbox]):not([type=file]),select{box-sizing:border-box;min-width:0;width:100%;max-width:100%;height:50px;min-height:50px;font-size:16px;line-height:1.4;border-radius:8px}
+ input[type=date],input[type=time]{appearance:none;-webkit-appearance:none;direction:ltr;text-align:right}
+ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value{min-width:0;text-align:right}
+ input[type=date]::-webkit-datetime-edit{min-width:0;padding:0}
+ textarea{width:100%;max-width:100%;min-width:0;font-size:16px;min-height:110px;border-radius:8px}
+ .phone-payment{font-size:14px;line-height:1.7}
+ .btn,.secondary-btn{min-height:48px;font-size:14px;white-space:normal;border-radius:8px}
+ .join-card{padding:22px;border-radius:14px}.join-card form{grid-template-columns:minmax(0,1fr)}
+ dialog{max-height:calc(100dvh - 24px);width:calc(100% - 24px);border-radius:16px;overflow-y:auto}
+ dialog section{padding:22px}.dialog-controls{flex-wrap:wrap}.dialog-controls .btn{flex-basis:100%;font-size:15px}
+ .tracking-card{padding:20px;border-radius:14px;overflow-wrap:anywhere}
+ .sidebar{padding:20px 16px}.sidebar nav{gap:8px;scrollbar-width:none;padding-bottom:6px}
+ .sidebar nav button{min-height:44px;flex-shrink:0;font-size:14px;padding:10px 14px;border-radius:8px}
+ .sidebar-bottom{flex-wrap:wrap;gap:14px}.sidebar-bottom a,.sidebar-bottom button{font-size:13px;min-height:40px;display:inline-flex;align-items:center}
+ .staff-main{padding:26px 5%;min-width:0}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .stats>div{padding:16px}.stats span,.stats small{font-size:12px;line-height:1.5}
+ .stats strong{font-size:32px}
+ .order-board,.kitchen-mode .order-board{grid-template-columns:minmax(0,1fr)}
+ .order-card{padding:20px;border-radius:14px;overflow-wrap:anywhere}
+ .board-heading{flex-wrap:wrap;gap:14px}.board-heading>*{min-width:0;max-width:100%}
+ .booking-board-date{width:100%}.booking-board-date input{min-width:0}
+ .manage-menu article{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;padding:16px;border-radius:12px}
+ .manage-menu img{width:64px;height:64px}.manage-menu h3{font-size:18px;line-height:1.4}
+ .manage-menu p{font-size:14px}.manage-menu .toggle,.manage-menu .upload-btn{grid-column:1/-1;min-height:44px;font-size:14px;display:flex;align-items:center}
+ .booking-admin-summary{grid-template-columns:minmax(0,1fr);gap:12px}
+ .booking-admin-summary>div{padding:18px}.booking-admin-summary span,.booking-admin-summary small{font-size:13px}.booking-admin-summary strong{font-size:30px;margin:8px 0}
+ .reservation-card,.booking-settings-card,.settings-card,.integration-card{padding:20px;border-radius:14px;min-width:0}
+ .reservation-card header{flex-wrap:wrap;gap:12px}.reservation-status{font-size:12px}
+ .reservation-details{font-size:15px;line-height:1.6}.reservation-details span:last-child{font-size:13px}
+ .reservation-actions .btn,.reservation-actions .secondary-btn{min-height:44px;font-size:14px}
+ .booking-hours-grid{grid-template-columns:minmax(0,1fr);gap:20px}
+ .booking-table-settings>div{grid-template-columns:minmax(0,1fr);gap:16px}.booking-table-settings>div>b,.booking-enabled{grid-column:auto}
+ .booking-table-settings input:not([type=checkbox]),.booking-table-settings select{font-size:16px;height:50px}
+ .booking-settings-card p,.booking-settings-card small,.integration-card p{font-size:14px;line-height:1.7}
+ .table-grid{grid-template-columns:minmax(0,1fr)}.table-card{padding:20px;border-radius:12px}
+ .table-actions{flex-wrap:wrap}.table-actions button{min-height:44px;font-size:13px}
+ .qr-base{padding:20px}.qr-base label{min-width:0;max-width:100%}
+ .table-order-header{flex-wrap:wrap;gap:12px}.table-order-header>*{min-width:0}
+ .login-form{padding:32px 6%}.login-art p{font-size:18px}
+}

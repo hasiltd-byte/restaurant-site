@@ -1,0 +1,10 @@
+import {chromium} from '../.qa/node_modules/playwright/index.mjs';
+import {readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+try{
+ const page=await browser.newPage({bypassCSP:true});await page.route('**/order/api/menu',route=>route.fulfill({json:{videos:{}}}));await page.goto('http://127.0.0.1:3000/');await page.waitForSelector('.dish-card');
+ await page.setViewportSize({width:1440,height:1000});const desktop=()=>page.locator('.dish-card').first().evaluate(el=>({width:el.getBoundingClientRect().width,font:getComputedStyle(el.querySelector('h3')).fontSize,columns:getComputedStyle(el.parentElement).gridTemplateColumns}));await page.addStyleTag({content:readFileSync('app/globals.css','utf8').split('/* Mobile layout:')[0].replace(/@import[^;]+;/g,'')});const before=await desktop();await page.addStyleTag({content:readFileSync('app/globals.css','utf8').replace(/@import[^;]+;/g,'')});assert.deepEqual(await desktop(),before,'Desktop menu changed');
+ for(const theme of ['rosso','notte','sole']){await page.evaluate(t=>{const el=document.querySelector('.site');el.className='site '+t},theme);for(const width of [320,390,430,760]){await page.setViewportSize({width,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,`${theme} ${width} overflow`);const card=page.locator('.dish-card').first();assert.ok(await card.evaluate(el=>el.getBoundingClientRect().width>innerWidth*.85));assert.equal(await card.locator('p').evaluate(el=>getComputedStyle(el).fontSize),'16px');assert.ok((await card.locator('.add-dish').boundingBox()).height>=44)}if(theme==='rosso'){await page.setViewportSize({width:390,height:844});await page.locator('#menu').scrollIntoViewIfNeeded();await page.screenshot({path:'.qa/screenshots/mobile-menu-improved.png'})}}
+ console.log('PASS: mobile menu in all three designs at 320/390/430/760px; 16px descriptions, 44px buttons, no overflow; desktop menu unchanged.');
+}finally{await browser.close()}
