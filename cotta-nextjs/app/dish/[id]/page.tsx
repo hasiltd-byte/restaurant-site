@@ -1,6 +1,7 @@
 import {notFound} from 'next/navigation';
-import dishes from '../../../shared/menu.json';
+import {getOrderService} from '../../../orders-app/runtime.mjs';
 import DishDetail from './DishDetail';
-export function generateStaticParams(){return dishes.map(d=>({id:d.id}))}
-export async function generateMetadata({params}:{params:Promise<{id:string}>}){const {id}=await params;const d=dishes.find(x=>x.id===id);return {title:d?`${d.name} · COTTA`:'COTTA'}}
-export default async function DishPage({params}:{params:Promise<{id:string}>}){const {id}=await params;const d=dishes.find(x=>x.id===id);if(!d)notFound();return <DishDetail dish={d}/>}
+export const dynamic='force-dynamic';
+async function findDish(id:string){const service=await getOrderService();return (await service.publicMenu()).menu.find((d:{id:string})=>d.id===id)}
+export async function generateMetadata({params}:{params:Promise<{id:string}>}){const {id}=await params;const d=await findDish(id);return {title:d?d.name+' · COTTA':'COTTA'}}
+export default async function DishPage({params}:{params:Promise<{id:string}>}){const {id}=await params;const dish=await findDish(id);if(!dish)notFound();return <DishDetail dish={dish}/>;}

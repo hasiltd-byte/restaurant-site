@@ -33,7 +33,7 @@ export async function connectDatabase(options={}){
     await models.MutationLock.updateOne({_id:'state'},{$inc:{version:1}},{session});
     return context.run(session,fn);
    },{readConcern:{level:'snapshot'},writeConcern:{w:'majority'},maxCommitTimeMS:10000})},
-   async initialize(menu){await db.transaction(async()=>{if(!await db.one('Config',{key:'secret'}))await db.setConfig('secret',randomBytes(32).toString('hex'));for(const item of menu)await db.update('MenuItem',{_id:item.id},{$setOnInsert:{id:item.id,available:true,video:null}},{upsert:true});await db.ensureTables()})},
+   async initialize(menu){await db.transaction(async()=>{if(!await db.one('Config',{key:'secret'}))await db.setConfig('secret',randomBytes(32).toString('hex'));for(const [index,item] of menu.entries()){await db.update('MenuItem',{_id:item.id},{$setOnInsert:{id:item.id,available:true,video:null}},{upsert:true});if(!(await db.one('MenuItem',{id:item.id}))?.name)await db.update('MenuItem',{id:item.id},{$set:{...item,sortOrder:index}});}await db.ensureTables()})},
    async ensureTables(){const count=Number(await db.getConfig('tableCount','12'));const rows=await db.find('ReservationTable',{number:{$lte:count}},{number:1});if(rows.length===count)return rows;for(let number=1;number<=count;number++)await db.update('ReservationTable',{_id:number},{$setOnInsert:{number,seats:4,area:'inside',enabled:true}},{upsert:true});return db.find('ReservationTable',{number:{$lte:count}},{number:1})},
    async storeVideo(name,bytes,contentType){const stream=bucket.openUploadStream(name,{metadata:{contentType}});await pipeline(Readable.from([bytes]),stream);return stream.id},
    async video(name){return bucket.find({filename:name}).next()},

@@ -6,7 +6,7 @@ COPY app ./app
 COPY shared ./shared
 COPY public ./public
 COPY orders-app ./orders-app
-COPY next.config.mjs tsconfig.json next-env.d.ts ./
+COPY next.config.mjs tsconfig.json ./
 RUN npm run build
 ENV NODE_ENV=production
 EXPOSE 3000

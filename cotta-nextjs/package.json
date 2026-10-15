@@ -6,8 +6,9 @@
     "dev": "next dev --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
-    "test:orders": "node --test orders-app/server.test.mjs orders-app/reservations.test.mjs orders-app/concurrency.test.mjs",
-    "test:browser": "node scripts/next-browser-check.mjs"
+    "test:orders": "node --test orders-app/server.test.mjs orders-app/reservations.test.mjs orders-app/concurrency.test.mjs orders-app/products.test.mjs",
+    "test:browser": "node scripts/next-browser-check.mjs",
+    "test:catalog": "node scripts/catalog-browser-check.mjs"
   },
   "engines": {
     "node": ">=22.13.0"
@@ -18,7 +19,8 @@
     "next": "^16.4.1",
     "qrcode": "^1.5.4",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
